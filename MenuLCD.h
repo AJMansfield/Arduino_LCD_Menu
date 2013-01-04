@@ -18,7 +18,7 @@ CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR
 ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-#include <LiquidCrystal.h>
+#include <LiquidCrystal_I2C.h>
 
 #ifndef MenuLCD_H
 
@@ -26,7 +26,7 @@ ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSI
 class MenuLCD
 {
   public:
-  MenuLCD(int LCDRS, int LCDE, int LCDD4, int LCDD5, int LCDD6, int LCDD7, int characters, int lines);
+  MenuLCD(int LCDADDR, int characters, int lines);
   bool MenuLCDSetup();
   bool PrintMenu( char ** pString, int nLines, int nSelectedLine /*= 0*/ );
   bool PrintLineRight( char* pString, int iRow );
@@ -34,7 +34,7 @@ class MenuLCD
   int getLines();
   int getCharacters();
   void ClearLCD();
-  LiquidCrystal * getLCD();
+  LiquidCrystal_I2C * getLCD();
 
   enum Direction{ LEFT, RIGHT };
 
@@ -43,13 +43,8 @@ class MenuLCD
 
   
   private:
-  LiquidCrystal* m_pLCD;
-  int m_LCDRS;
-  int m_LCDE;
-  int m_LCDD4;
-  int m_LCDD5;
-  int m_LCDD6;
-  int m_LCDD7;
+  LiquidCrystal_I2C* m_pLCD;
+  int m_LCDADDR;
   int m_characters;
   int m_lines;
 };

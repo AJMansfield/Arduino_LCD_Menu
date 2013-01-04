@@ -19,16 +19,11 @@ ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSI
 */
 
 #include <arduino.h>
-#include <LiquidCrystal.h>
+#include <LiquidCrystal_I2C.h>
 #include "MenuLCD.h"
 
-MenuLCD::MenuLCD(int LCDRS, int LCDE, int LCDD4, int LCDD5, int LCDD6, int LCDD7, int characters, int lines)
-: m_LCDRS( LCDRS ),
-  m_LCDE( LCDE ),
-  m_LCDD4( LCDD4 ),
-  m_LCDD5( LCDD5 ),
-  m_LCDD6( LCDD6 ),
-  m_LCDD7( LCDD7 ),
+MenuLCD::MenuLCD(int LCDADDR, int characters, int lines)
+: m_LCDADDR( LCDADDR ),
   m_characters( characters ),
   m_lines( lines )
 {
@@ -36,7 +31,7 @@ MenuLCD::MenuLCD(int LCDRS, int LCDE, int LCDD4, int LCDD5, int LCDD6, int LCDD7
 
 bool MenuLCD::MenuLCDSetup()
 {
-  m_pLCD = new LiquidCrystal(m_LCDRS, m_LCDE, m_LCDD4, m_LCDD5, m_LCDD6, m_LCDD7);
+  m_pLCD = new LiquidCrystal_I2C(m_LCDADDR);
   m_pLCD->begin(m_characters, m_lines);
 }
 
@@ -49,15 +44,15 @@ bool MenuLCD::PrintMenu( char* pString[], int nLines, int nSelectedLine = 0 )
     if( i == nSelectedLine )
     {//this line should be surrounded by []
        m_pLCD->setCursor(0, i);
-       m_pLCD->write( '[');
-       m_pLCD->setCursor(1,i);
+       m_pLCD->print( "> " );
+       m_pLCD->setCursor(2,i);
        m_pLCD->print( pString[i] );
        m_pLCD->setCursor(m_characters - 1, i);
-       m_pLCD->write( ']');
+       //m_pLCD->write( ']');
     }
     else
     {
-      m_pLCD->setCursor(0,i);
+      m_pLCD->setCursor(2,i);
       m_pLCD->print( pString[i] );
     }
 
@@ -138,7 +133,7 @@ void MenuLCD::ClearLCD()
   m_pLCD->clear();
 }
 
-LiquidCrystal * MenuLCD::getLCD()
+LiquidCrystal_I2C * MenuLCD::getLCD()
 {
   return m_pLCD;
 }
